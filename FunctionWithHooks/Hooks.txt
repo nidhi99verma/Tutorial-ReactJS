@@ -1,0 +1,440 @@
+#>Hooks
+-useState
+-useEffect
+-useContext
+-useReducer
+-useCallback
+-useMemo
+-useRef
+
+
+1#>What are Hooks in React?
+
+-Hooks are a new feature addition in react version 16.5
+-They allow you to use React feature without having to write a class
+-ex: state of component
+-Hooks don't work inside classes they let you use react without classes
+-hooks are a feature to use other react feature without using class
+-Avoid whole confusion with 'this' keyword
+-Avoid you to reuse stateful logic
+-Organize the logic inside a component into reusable isolated units
+
+2#>Why hooks?
+
+reason1: 
+-understand how 'this' keyword works in javaScript
+-Rember to bind event handlers in class components
+-Class don't minify very well and make hot reloading very unreliable
+resson2: 
+-There is no particular way to reuse stateful component logic
+-HOC and render props patterns do address this problem
+-Markes the code harder to follow 
+-there is need a to share stateful logic in a better way
+resson3:
+-Create component for complex scenarios as data fetching and subscribing to events relate code is not orzanized in one place
+-ex:Data fetching-in componentDidMount and omponentDidUpdate 	  
+    Event listeners-In omponentDidMount and componentWillUnmount
+Because of stateful logic- can not break components into smaller ones
+
+3#>Rules of Hooks
+
+-Only call Hooks at the Top level: Don;t call hooks inside loops, conditions or nested functions
+-Only call Hooks from React functions: call them from within function components and not just any regular JavaScript function
+
+4#>useState
+
+-hooks allow to use state in functional component
+-const [count, setCount] = useState(0)
+
+    return (
+        <div>
+            <button onClick={() => setCount(count + 1)}>Count {count}</button>
+        </div>
+    )
+
+-need to be import {useState}
+-useState is just function to call them, it accept an argument which is initial value of the state property and returns cureent value of the state property and method (setCounnt) that is capable of updating that state prpoerty
+-For update state value we need to pass arrow function in method which is capable of updating that state prpoerty
+
+summary:
+
+-the useState hook lets you add state to function components
+-in classes, the state is alwaya an object
+-with the useState hook, the state doesn't have to be an object 
+-the useState hook returns an array with 2 elements 
+-the first element is the current value of the state, and the second element is a state setterfunction
+-New state value depends on the previous state value? you can pass a function to the setter function
+-when dealing with objects or array, always make sure to spread your state variable and then call the setter function
+
+4#>useState with previous state
+
+-const incrementFive = () => {
+        for(let i = 0; i < 5; i++){
+            setCount(precousCount => precousCount + 1)
+            //it will not take previous value so u get wrong output
+            // setCount(count + 1)
+        }
+    }
+
+-{/* This is possible with this way but it is not right way to do this*/}
+            {/* <button onClick={() => setCount(count + 1)}>Count + </button>
+            <button onClick={() => setCount(count - 1)}>Count - </button> */}
+
+            {/* right way */}
+            <button onClick={() => setCount(initialCount)}>Reset</button>
+            <button onClick={() => setCount(precousCount => precousCount + 1)}>Count + </button>
+            <button onClick={() => setCount(precousCount => precousCount - 1)}>Count - </button>
+            {/*in this condition above approach will not give right answer in this case */}
+            <button onClick={incrementFive}>Count +5 </button>
+
+5#>State with object
+
+-const [name, setName] = useState({firstName: '', lastName: ''})
+
+    return (
+        <div>
+            <input 
+                type='text'
+                value={name.firstName}
+                //onChange={(e) => {setName({firstName: e.target.value})}}
+                onChange={(e) => {setName({...name, firstName: e.target.value})}}
+            />
+            <input 
+                type='text'
+                value={name.lastName}
+                //onChange={(e) => {setName({lastName: e.target.value})}}
+                onChange={(e) => {setName({...name, lastName: e.target.value})}}
+            />
+            <h5>Your first Name is : {name.firstName}</h5>
+            <h5>Your last Name is : {name.lastName}</h5>
+            <h6>{JSON.stringify(name)}</h6>
+
+-without spead operator it will take only one value from object
+-the setter function provided by hooks does not automatically merge and update objects you have to manually merge it yourself and then pass the value to setter function
+
+
+6#>State with Array
+
+-without spead operator it will take only one value from object
+-the setter function provided by hooks does not automatically merge and update objects you have to manually merge it yourself and then pass the value to setter function
+-const [items, setItems] = useState([])
+
+    const addItemHandler = () => {
+        setItems([...items, {
+            id: items.length,
+            value: Math.floor(Math.random() * 10) + 1
+        }])
+    }
+
+    return (
+        <div>
+            <button onClick={addItemHandler}>Add Item</button>
+            <ul>
+                {
+                    items.map(item => (<li key={item.id}>{item.value}</li>))
+                }
+            </ul>
+        </div>
+    )
+
+7#>useEffect
+
+-useEffect is use to avoid problems in class component that is repeat code at the same time group together only the related code well that is where effect hook comes
+-ex: In class component 
+
+componentDidMount () {
+        document.title = `Clicked ${this.state.count} times`
+    }
+
+    componentDidUpdate () {
+        document.title = `Clicked ${this.state.count} times`
+    }
+
+-It is a close replacement for componentDidMount, componentDidUpdate and componentWillUnmount
+-when we specify useEffect we are basically requesting react to execute the function that is passed as an argument every time the component renders
+-useEffect runs after every render of the component 
+-it runs both after first render and after every update
+-useEffect place inside component by doing this we can easily access the component state and props without having to write any additional code  
+
+8#>Conditionally run useEffect
+
+-in class component
+-componentDidUpdate (precvProps, prevState) {
+        if(prevState.count !== this.state.count){
+            console.log('Update count in document title');
+            document.title = `Clicked ${this.state.count} times`
+        }
+    }
+
+-In function component
+- useEffect( () => {
+        console.log('Updating document title');
+        document.title = `Clicked ${count} times`
+    }, [count])
+-In order to conditionally run an effect specify the 2nd parameter to useEffect() the 2nd parameter is the array of values the effect depends on if value don't change between render the effect is simply not run so a good optimization technique 
+-above useEffect() will rerending dependes on [count] if count value will update then it will rerende either not
+-rerending dependes on useEffect() in 2nd argument [] in pass value if it will update then rerender
+
+9#>Run useEffect only once
+
+- useEffect(() => {
+        console.log('UseEffect called')
+        window.addEventListener('mousemove', logMousePosition)
+    }, [])
+
+-want call useEffect only on initial render and forget about it 
+-we can mimicked componentDidMount with useEffect hooks by passing simply in useEffect in empty array[] as 2nd parameter to useEffect 
+-empty array[] pass in useEffect means that this particular effect does not depend on any props or state so there is no resion for you to call this effect on rerender it means you want call useEffect only on initial render and forget about it 
+-useEffect call on initial render and when mouse move around we only have mouse event logs useEffect not call on subsequent renders
+
+10#>useEffect with cleanup
+
+-useEffect(() => {
+        console.log('UseEffect called')
+        window.addEventListener('mousemove', logMousePosition)
+
+        return () => {
+            console.log('component unmount')
+            window.removeEventListener('mousemove', logMousePosition)
+        }
+
+    }, [])
+
+-even though component has been removed the eventlistener which belongs to that component is still listening and executing 
+-when component unmount make sure you cancel all you subscription and listeners in other words clean up after your component
+-that is function pass to useEffect can return a function which will executed when the component will unmount so what ever u return is basically your cleanup function
+-cleanup code can be canceling subscription timers or even removing event handler
+
+11#>useEffect with incorrect dependency
+
+-const clock = () => {
+        setCount(count + 1)
+    }
+
+    useEffect(() => {
+        
+        const interval = setInterval(clock, 1000)
+
+        return () => {
+            clearInterval(interval)
+        }
+
+    }, [count])
+
+-// OR
+
+    const clock = () => {
+        setCount((prevCount) => prevCount + 1)
+    }
+
+    useEffect(() => {
+
+        // function doSomthing(){
+        //     console.log(someProp);
+        // }
+        
+        const interval = setInterval(clock, 1000)
+
+        return () => {
+            clearInterval(interval)
+        }
+
+    }, [])
+    // }, [someProp])
+
+    return (
+        <div>
+             <h6>{count}</h6>
+        </div>
+    )
+}
+
+-here useEffect rendering depends on count(state) so do not forget to pass count in array but if u are using prevoCount then no need to pass this state in array 
+-any props or state value require for render then always pass in array
+
+-in class component related code split into different life cycle method where unrelated code is put together in the same life cycle method hooks solve that it is possible to include multiple useEffect call in same component 
+
+Multiple useEffect: u can use multipe useEffect basically grouprd related code together and code look much more organized, so u have multiple useEffect to run 
+make sure you separate them out rather than having all code in single useEffect 
+
+12#>Fetching data with useEffect 
+
+-useEffect(() => {
+        axios.get('https://jsonplaceholder.typicode.com/posts')
+            .then( res => {
+                console.log(res)
+                setPosts(res.data)
+            }) 
+            .catch( error => {
+                console.log(error);
+            })  
+    }, [])
+
+13#>useContext Hooks
+
+-Context provides a way to pass data through the component tree without having to pass props down manually at every level
+
+-export const UserContext = React.createContext()
+export const ChannelContext = React.createContext()
+
+function UseContextFun() {
+    return (
+        <div>
+            <h5>using useContext</h5>
+            <UserContext.Provider value={'Nidhi'}>
+                <ChannelContext.Provider value={'Khana'}>
+                    <ComponentCFun/>
+                </ChannelContext.Provider>
+            </UserContext.Provider>
+
+	<h5>simple way of using useContext</h5>
+            <UserContext.Provider value={'Nidhi'}>
+                <ChannelContext.Provider value={'Khana'}>
+                    <ComponentCUseContextFun/>
+                </ChannelContext.Provider>
+            </UserContext.Provider>
+
+-function ComponentCUseContextFun() {
+
+    const user = useContext(UserContext)
+    const channel = useContext(ChannelContext)
+
+    return (
+        <div>
+            <div>UserContext {user}, Nested UserContext {channel}, in simple way</div>
+        </div>
+    )
+}
+
+14#>Hooks so far
+
+-useState-state
+-useEffect-side effects
+-useContext-context API
+-useReducer-reducers
+
+15#>useReducer
+
+- useReducer is a hook that is used for state managment. It is an alternative to useState
+-useReducer is more primitive hook compair to useState 
+-to understand useReducer 1st we have to understand reducer method of js
+-Reducer method:
+-const array1 = [1,2,3,4];
+const reducer = (accumulator, currentValue) => accumulator + currentValue
+
+console.log(array1.reduce(reducer)); //10
+
+console.log(array1.reduce(reducer, 5)); //15
+
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
+
+-reducer va useReducer:
+reducer in JavaScript                            |          useReducer in React
+1>array.reduc(reducer, initialValue)	         | useReducer(reducer, initialState)
+2>singleValue = reducer(accumulator, itrmValue)  | newState = reducer(currentState, action)
+3>reducer method returns a single value          | useReducer returns a pair of values [newState, dispatch]
+
+-useReducer Summary:
+-useReducer is a hook that is used for state managment in react
+-useReducer is related to reducer functions
+-useReducer(reducer, initialState)
+-reducer(currentState, action)
+
+-complex useReducer: in which we can use both state and action as object
+-maintaining multiple variable in a single state object is suitable when we dealing with global state not for local state
+
+-Multiple useReducer:when dealing with multiple state variable that have same state transition it is good idea to have multiple useReducer making use of the same reducer function this will avoid complexcity of merging state if it were to be an object and also prevents us from duplicating code in reducer function
+
+-useReducer - local state management
+-Share state between components - Global state management (useReducer + useContext)
+-combining useReducer with useContext for global state managment
+
+16#>useReducer vs useState
+
+-useState:
+>Type of state: better suit with Number, string, boolean
+>Number of state transition: One or two
+>Related state transition: No(reusable state)
+>Business logic: No business logic
+>local state
+
+-useReducer:
+>Type of state: better suit with Object or Array
+>Number of state transition: Too many
+>Related state transition: Yes(reusable state)
+>Business logic: Complex business logic
+>global state
+
+17#>useCallback
+
+-it is use to optimize performance
+-useCallback is a hook that will return a memoized version of the callback function that only changes if one of the dependencies has changed.
+-it is useful when passing calllbacks to optimized child componets that rely on reference equality to prevent unnecessary renders(using React.memo())
+-call useCallback which accepts a callback function as its first parameter and array of dependency its second parameter
+
+-const incementAge = useCallback(() => {
+        setAge(age +  1)
+    }, [age]) 
+
+-usecallback's use is not a good idea for some time //https://kentcdodds.com/blog/usememo-and-usecallback
+
+18#>Reac.memo() : is a higher order component that will prevent a functional component from being re-render if it's props or state do not change.
+
+19#>useMemo             //dought
+
+-    const isEven = useMemo(() => {
+            let i = 0                                       
+            while(i < 200000000)               
+            i++                                 
+            return counterOne % 2 === 0
+    }, [counterOne])
+
+-use for performance optimization
+-isEven function in we use 'while' condition to make click slow to show even odd but it is also run when increaseTwo method call so we need useMemo for this problem
+
+20#>what is diff between useMemo and useCallback       //dought
+
+-useCallback caches provided function instance itself where useMemo invokes the provided function and caches its result so if you need to cache a function use useCallback and when u need to cache result of invoke function use useMemo
+
+-useMemo
+-const isEven = useMemo(() => {
+            let i = 0                           //             
+            while(i < 200000000)                //this part make slow to show Count even or odd 
+            i++                                 // 
+            return counterOne % 2 === 0
+    }, [counterOne])  //caches its result(counterOne)
+
+-useCallback
+- const incementAge = useCallback(() => {    //useCallback caches provided function instance itself
+        setAge(age +  1)
+    }, [age]) 
+
+21#>useRef
+
+-useRef make it possible to access Dom nodes directly within functional components
+
+-const inputRef = useRef(null)
+
+    useEffect(() => {
+        //focus the input elelment
+        inputRef.current.focus()
+    }, []) 
+
+    return (
+        <div>
+            <input ref={inputRef} type='text'/>
+        </div>
+    )
+
+-useRef can hold a referencwe to DOM node using the ref attribute it can also be use to store anu muteable value, great thing about useRef is that value will persist through rerende while also not causing any additional rerenders when its value changes so to solve the problem at hand we will use the useRef hook 
+
+-use to create generic container which can hold a mutable value similar to instance properties on class component this genric container does not cause rerender when data stores is changes at the same time it also remembers the stored data even after other state variables caused a rerender of this component
+
+22#>Custom Hooks
+
+-A Custom Hooks is basically a javaScript function whose name start with 'use'.
+-A Custom Hooks can also call other hooks if required
+
+-why: share logic-alternative to HOCs and Render Props
+
+#>useImperativeHandle, useLayoutEffect and useDebugValue

@@ -1,0 +1,701 @@
+1#>What is React 
+-It states that it is a javaScript library for building user interfaces.
+
+2#>Why React
+-Faster then vanila javaScript because use of virtual DOM.
+-reuseable component reduce line of code.
+
+3#>React is declarative
+-In react the DOM is declarative. This means we never interact with DOM, the UI is updated when we change the state. This makes it easier to design UI and debug them, You can just change the program's state and see how the UI will look at that particular time.
+
+4#>Componets
+-describe UI using components. Component is like function we can reuse also and get UI in output. Props and state can be input of this function.
+-component can contain other component.
+-don't need to invoke like function, use like as HTML tag.
+-reuseable pice of html
+
+5#>Component Base Architecture
+-React break down your application into small encapsulated parts which can then be composed to make more complex UI.
+
+6#> difference between npm and npx.
+-npx:  npm package runner. 
+-npx:  which gets install when you install node and that is how we are direactly able to run create-react-app without having install it. 
+-npx create-react-app <project_name>
+
+-yarn: this also a package manager
+
+-npm: node package manager.
+-npm: we install create-react-app package globally and then use the package to genrate the projects.
+-npm i create-react-app -g
+create-react-app <project_name>
+
+7#>package.json  file
+-this file contains dependencies and the scripts require for project.
+
+8#>package-lock.json  file
+-package-lock. json is automatically generated for any operations where npm modifies either the node_modules tree, or package. json. It describes the exact tree that was generated, such that subsequent installs are able to generate identical trees, regardless of intermediate dependency updates.
+
+9#>node_module file
+-this is folder in which all the dependencies are installed it is generated when you run the create-react-app command or run npm install.
+
+10#>How many types of component
+-Functional Component : is literally js function the return HTML which describes UI.
+-accepts input of properties and returns Html.
+-function welcome (props) {
+	return <h1>Hello, {props.name}</h1>;
+}
+
+-Class component : is regular ES6 classes that extend the component class from react library. They must contain render method which return Html
+-accepts input of properties and returns Html. Apart from props a class component can also maintain a private internal state in simpler worlds it can maintain some information which is private to that component and use that information to describe the UI 
+-class welcome extends React.component {
+	render(){
+	    return <h1>Hello, {props.name}</h1>;
+	}
+}
+
+11#>what difference in export use with class or function and use export in last export default class or function name.
+-use export with class or function ex: export class comp extends : in this situation you have to improve component with exact same name
+-use exportin last with class or function name ex: export default comp : in this situation you have to improve component with any name not bounded to use same name.
+
+
+12#>Functional vs class component
+-functional components:
+>simple function
+>Use function components as much as possible
+>absence of 'this' keyword
+>solution with using state
+>mainly responsible for the UI
+>stateless/Dumb/Presentational
+
+-class components:
+>More feature rich
+>maintain their own private data-state
+>complex UI logic
+>Provide lifecycle hooks
+>stateful/smart/container
+
+13#>JSX
+-JSX stands for JavaScript XML. JSX allows us to write HTML in React. JSX makes it easier to write and add HTML in React.
+-JSX allows us to write HTML elements in JavaScript and place them in the DOM without any createElement()  and/or appendChild() methods.
+-JavaScript xml extension to js language syntaxt.
+-write xml- like code for element and components.
+-jsx tags have a tag name, attributes and children.
+-jsx is not a nedessity to write react applications. 
+-jsx makes your react code simpler and elegant.
+-jsx ultimately transpiles to pure js which is understood by the browser.
+
+14#>Jsx differences
+-class- className
+-for- htmlFor
+-camelCase property naming convention->onclick-onClick, tabindex-tabIndex,..
+
+15#>props
+props in function:
+-through props we can render dynamic content.
+-props is just a object that contain values of different-different property coresponding to components.
+-props isjust  an object that contains the attributes and their values which have been pass from parent component. 
+-props is stand for properties is the optional input that your component can accept it also allow to component to be dynamic.
+-it is similar like passing parameter to function and props like argument.
+-props is immutable (value can't be change)
+-usually parent component passed down the props to child component.parents owns the props and cann't be change by children.
+
+//in js
+-fun1(value){}
+fun1('nidhi')
+//in react function component
+-fun1(props){}
+<fun1 value='nidhi'/>
+-{props.value}
+
+props in class:
+-props parameter in class component the properties are available through 'this'  dot pros(this.props) which is reserved in class components.
+//in react class component
+-class Cls extends Component {}
+<Cls value='nidhi'/>
+-{this.props.value}
+
+16#>State
+-component has full controlled to change the state
+-state is object that is privately maintained inside a component a state can influence(change) what is rendered in the browser
+-state can be change with in component.
+- when we need to change state variable then we have to use 'setState' method and pass object where varaible's value will change. 
+
+-constructor(){
+        super()
+        this.state = {
+            message : "Welcome visitor"
+        }
+    }
+
+    changeMessage(){
+        this.setState({
+                message : "Thanks visitor"
+        })
+    }
+
+    render() {
+        return (
+            <div>
+                <h5>State in component class</h5>
+                <h6>{this.state.message}</h6>
+                <button onClick={() => {this.changeMessage()}}>Click Me</button>
+            </div>
+        )
+    }
+
+17#>State vs props | both props and state hold information that influnce UI in the browser.
+-props:
+>props get passed to the component
+>function parameter
+>in function componet -props, in class componet-this.props
+
+-state:
+>state is managed within the component
+>variable declared in the function body
+>in function componet -useState Hook, in class componet-this.state
+
+18#>State and setStae method
+- Never modify the state directly instead make use of setState when u modify state directly react will not rerender component. setState on other hand will let react will let react now it has to rerender the component.
+
+-class CounterCls extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            count: 0                        //hold cureent and inital value
+        }
+    }
+
+    // increment() {
+    //     this.setState({
+    //         count: this.state.count + 1     //hold value that will update
+    //     },
+    //         () => console.log(this.state.count, "Updateted value")   //* 1
+    //     )
+    //     //sync
+    //     console.log(this.state.count, "value in State");         //2
+    //     //in console counter set 1 but log value 0 why
+    //     //because calls to setState are asynchronous so 
+    //     //console.log is call berfore this.setState in actually value set         
+    // }
+
+//react may group multiple setState calls into a single update for better performance 
+//in this scenario : all 5 setState  calls are done in one single go and updated value does not carry over 
+//between different calls
+
+//so in this scenario: we have to update state value based on previous state for this
+//we need to pass 'function as an argument' to setstate() insted of passing in an object
+
+//we are not using current state always using previous state
+
+//previousState: hold previous all value of state
+
+increment() { 
+    this.setState((previousState, props) => ({  
+        count: previousState.count + 1   
+        //count: previousState.count + props.addValue //if new state depends on props object 
+        }))
+        console.log(this.state.count, "value in State");      
+}
+
+    
+
+    incrementFive(){
+        this.increment()
+        this.increment()
+        this.increment()
+        this.increment()
+        this.increment()
+    }
+
+    render() {
+        return (
+            <div>
+                <h5>Counter In Class</h5>
+                <h6>Counter : {this.state.count}</h6>
+                <button onClick={() => this.incrementFive()}>Increment</button>
+            </div>
+        )
+    }
+}
+
+export default CounterCls
+
+//* 1_scenario>> where u want updated value but u can see that 2console value is not updated because setState work 
+//asynchronous so if we need current updated value then we have to pass callback function in setState() in 
+//as a second argument
+
+//value in State log in : always show previous value 
+//Updateted value log in : can see update value because of callback pass in setState( )
+
+//whenev u need to execute some code after state has been changed do not place that code right after setState method
+//insted place code within the callback function that is passed as a second parameter to setState() 
+
+19#>setState
+-always make use of setState and never modify the state directly
+-code has to be executed after the state has been updated? place that code in the callback function which is the second argument to the setState method
+-When you have to update state based on the previous state value, pass in a function as an argument instead of the regular object 
+
+20#>Destructuring props and state
+-it make possible to unpack values from arrays or properties from object into distinct variables 
+-in react Destructuring props and state improve code readability  
+
+-DestructurPropsFun(props) { 					//Destructuring props in function #1 way
+    const {name, age, children} = props;
+//or
+-DestructurPropsFun({name, age, children}) { 		       //Destructuring props in function #2 way
+
+-render() {
+        const {name, age, children} = this.props;             //Destructuring props in class
+
+-render() {						
+	const {message} = this.state;           	     //Destructuring state in class
+
+21#>Event
+-web application u create typically tends to have user interaction When the user interactions with your application events are fired
+-ex: mouse click, mouse hover, ...
+-specify function or method within {}
+-event handler is a function and not a function call do not add ()
+
+-onClick={this.clickHandler}         //in class
+
+-onClick={clickHandler}             //in function
+
+20#>Binding Event Handlers
+-constructor(props) {
+        super(props)
+    
+        this.state = {
+             message: 'Hi..😁'
+        }
+        // 3 way
+        this.changeMessage = this.changeMessage.bind(this)
+    }
+
+    // changeMessage(){
+    //     this.setState({                       //*1
+    //             message : "Bye..😩"
+    //     })
+    //     //console.log(this);          
+    // }
+
+
+    //4 way
+    changeMessage = () => {
+        this.setState({                      
+                message : "Bye..😩"
+        })        
+    }
+    
+
+    render() {
+        return (
+            <div>
+                <h5>Event Binding in Class</h5>
+                <h6>{this.state.message}</h6>
+                {/* 1 way */}
+                <button onClick={() => this.changeMessage()}>Click</button>
+                {/* 2 way */}
+                <button onClick={this.changeMessage.bind(this)}>Click</button>
+            </div>
+        )
+    }
+}
+
+export default EventBindCls;
+
+//*1>changeMessage() why give error, when onClick={this.changeMessage} event fire and console.log(this) gives 'undefine'
+
+-region : 
+>This is because when you use an arrow function, the event handler is automatically bound to the component instance so you don't need to bind it in the constructor. When you use an arrow function you are binding this lexically
+
+>but our code we are not use arrow function onClick={this.changeMessage} so in constructor state' context puff out after execution and wheb we call changeMessage() so this cann't find state in constructor ....when ever use two thing(function , variable, object) which is dependent on each other then we have to bind with constructor because of context, when first context puff out then other will not work
+in this case we have requirement of binding constructor with dependent data(function , variable, object)
+
+21#>too many way to bind event with constructor:
+
+1> onClick={() => this.changeMessage()}                 //use arrow fun when event fire
+2> onClick={this.changeMessage.bind(this)}              //use bind 
+3> this.changeMessage = this.changeMessage.bind(this)  //inside constructor
+4> changeMessage = () => {...}                         //use fun which is called is arrow fun 
+
+-in 2 and 3 case we can see that event bind with constructor so context stay for that event
+-in 1 and 4 in use arrow fun so how this will bind event to constructor..answer is in this arrow function return this.changeMessage() so we use ()... and we know that in js when any function return any thing then dependent context will not puff out it will wait and stay.
+
+22#>How to pass method as props from parent component to child componet
+-passing reference to method as props to child componet 
+-ex: greetHandler={this.fun}
+-accept in child component - onClick={() => props.greetHandler('child')
+
+23#>Conditional rendering
+-1>if/else : render() { if(condition){ return (<html1>) }else{return (<html2>)}
+-2>element variables : render() { if(condition); let v;{  v = (<html1>) }else{v = (<html2>)} return(<>{v}</>)
+-3>Ternary Condition operator : render() { return condition ? (<html1>) : (<html2>) }
+-4>short circuit operator : if condition is flase it will not render any thing - return condition && (<html1>)
+
+24#>List Rendering
+-const personList = persons.map( person => <h6>I am {person.name}, my age {person.age} and my skill {person.skill}.</h6>);
+return <div>{personList}</div>
+
+-for list rendering we use map method and try to put component part in variable so code look simple and easy to render through one variable.
+-in list rendering every child in an array or iterator should have unique key prop.
+-key props is not accessable in child component because key prop is reserved
+-key helps in react that which items in a list have changed or added or removed and place a crucial rolein handling UI update efficiently
+
+-ex:1st UI 
+    <ul>
+	<li key=1>1</li>
+	<li key=2>2</li>
+    </ul>
+
+2nd UI : updated
+
+    <ul>
+	<li key=1>1</li>
+	<li key=2>2</li>
+	<li key=3>3</li>
+    </ul>
+
+3rd UI : updated(in this case key will help)
+
+    <ul>
+	<li key=3>3</li>
+	<li key=1>1</li>
+	<li key=2>2</li>
+    </ul>
+
+-react will compair old 1stUI and updated 2nd UI by using key, when it wil get differnce in UI according to above UI it will not rerender all <ul> it will add only new <li> thats why react is fast and that is use of key. key will help to differencate in UI
+
+25#>List and Keys
+-A 'key' is a special attribute you need to include when creatin list of elements.
+-key give the elements a stable identity
+-key help rect identify which items heve changed, are added, or are removed
+-Help in efficient update of the user interface
+
+26#>Where use index as Key?
+-The items in your list do not have a unique id.
+-The list is a static list and will not change.
+-The list will never be reordered or filtered.
+
+>why avoid use index as key because index as key cause some serious UI issues in certain scenarios.
+scenario: //https://codepen.io/gopinav/pen/gQpepq
+
+-try npm package to generate unique value or try hashing out a unique value from one of existing properties
+
+27#>Style Component
+-there is couple of option to style component:
+1>css sheets
+2>inline styling
+3>css modules (css module can't be uded in child component, classes are locally scope by default )
+4>css in js libraries 
+
+28#>Form Handeling
+1-need to assinge value in state
+> this.state = {
+             username: '',
+2-set state varable to value and add event
+>value={this.state.username} 
+>onChange={this.handelUsernameChange} 
+3-define event handler function 
+>handelUsernameChange = (event) => {
+        this.setState({
+            username: event.target.value
+        })
+    }
+so
+4-for submit use
+> <form onSubmit={this.handleSubmit}>
+5-define event handler function for onSubmit event
+
+
+29#>Component Lifecycle Methods for class component
+-React provide built in methods that we can override at particular stages in the life cycle so
+-these method do not exist in functional component
+-functional component with new proposal of hooks there is use effect hook which is partially relates to the lifecycle hooks 
+
+> Mainly we divid lifecycle method in 4 phases:
+-Mounting
+-Updating
+-Unmounting
+-Error Handling
+
+>When they call
+-Mounting : When an instance of a component is being created and inserted into the DOM
+-Updating : When a component is being re-rendered as a result of changes to either its props or state
+-Unmounting : When a component is being removed from the DOM
+-Error Handling : When there is an error during rendering , in lifecycle method or in the constructor of any child component
+
+>All Methods in these 4 phases
+-Mounting :       [1]constructor                      [2] static getDerivedStateFromProps [3] render [4] componentDidMount
+-Updating :       [1]static getDerivedStateFromProps  [2] shouldComponentUpdate           [3] render [4] getSnapshotBeforeUpdate [5] componentDidUpdate
+-Unmounting :     [1]componentWillUnmount
+-Error Handling : [1]static getDerivedStaticFromError [2] componentDidCatch
+
+30#>Mounting Lifecycle Methods
+-[1]constructor : 
+
+> A special function that will get called whenever a new component is created.
+> Initializing state Binding the event handlers
+> What you should do in a constructor is cause side effects for example you should never make HTTP requests within constructor.
+>important point to keep in mind when it comes to defining your own constructor the first one is that yiu have to call special function 'super()' this will call base class constructor in our component we have access to this this.props only after we have initially called super passing in the props as an argument
+> Constructor is also the only place where you expected to change or set the state by directly overwriting this.state fields in all other scenarios this,setState as a constructor set initial state find event handlers and don't cause any side effects like making Ajac call for example. 
+
+-[2] static getDerivedStateFromProps:
+
+>static getDerivedStateFromProps(props, state)
+>rarely used lifecycle method- when the state of the component depends on changes in props over time.(let's say that u have component but initial state of the component depends on props being passed to the component in such a scenario you can use this method to set state since this method is a static method it does not have access to the this keyword so you can not call this.setState with in this particular methode instead you simply have to return an object that represents the new state of the component) 
+> What you should do is cause side effects for example fetching data from an endpoint
+
+
+-[3] render :
+
+>render method is only required method in class component in render method we simply read this.pros and this.state and return the JSX Which describrs the UI.
+>What should not do here is changing the state of the component or interacting with DOM or making Ajax calls
+>Since it is render method JSX which also contains the other children component righr after the parent render method the children components lifecycle method are also executed.
+
+-[4] componentDidMount :
+
+>This method will call only once in the whole lifecycle of a given component and it is invoke immediately after a component and all its children component have been rendered to the DOM.
+>This is perfect place to cause side-effects you can interact with DOM and perform Ajax calls to load data so componentdidmount is a good place to perform initialization that requires DOM nodes and also load data by making network requests  
+
+31#>Updating Lifecycle Methods
+-[1]static getDerivedStateFromProps : 
+
+>static getDerivedStateFromProps(props, state)
+>This is static method which recevie props and state as its parameter and has to return either null or object that represents the updated state of the component this method is call every time a component is re-rendered this method is used when the state depends on props of the component
+>you should not cause any side effects and getDerivedStateFromProps this is one of the most raerly uses methods in updating phase example you should never make HTTP requests.
+
+-[2] shouldComponentUpdate :
+
+>shouldComponentUpdate(nextProps, nextState)
+>this method receives the updated props and state and purpose of this methode is clear from its name it dictates if at all the component should re-render or not by default all class components will re-render whenever the props they receive or their state changes this method can prevent that default behavior by returning false
+>what we can do in this method compare the existing props and state values with the next props and state values and return true or false to let react know whether the componet should update or not so this method is basically for performance optimization
+>what should avoid is causing any side effects or calling the setState method this lifecycle method again is classified as a rarely used lifecycle method 
+>do not cause side effects. Ex: HTTP requests calling the setState method
+
+-[3] render :
+
+>we simply read this.pros and this.state and return the JSX Which describrs the UI.
+>What should not do here is changing the state of the component or interacting with DOM or making Ajax calls
+
+-[4] getSnapshotBeforeUpdate :
+
+>getSnapshotBeforeUpdate(prevProps, prevState)
+>this method accept previous props and previous state and is called right before the changes from the virtual DOM are to be reflected in the DOM 
+>would use this method to capture some information from the DOM for example: u can read the user's scroll position and after the update maintain that scroll position byperforming some calculation this method will either return null or return a value the returend value will be pass to as the third parameter to the componentDidUpdate 
+>getSnapshotBeforeUpdate is use to read current DOM state and return a value or null.
+
+-[5] componentDidUpdate :
+
+>componentDidUpdate(prevProps, prevState, snapshot)
+>this method will called after the render is finished in the re-render cycles this measn that you can be sure the component and all its sub component have properly render itself after the update this method accepts three parameters prevProps, prevState and snapshot value return from getSnapshotBeforeUpdate method
+>this method is guaranteed to be called only once in each re-render cycle so what can do is cause side-effect that is you can make Ajax calls but before making the call you need to compare the previous props with the new props and then decide whether to make Ajax call or not if you are not compairing you are making unwantend requests.
+ 
+32#>Unmounting lifecycle Method  
+
+-[1]componentWillUnmount : 
+
+>method invoked immediately before component is unmounted and destroyed 
+>In this method we can perform some cleanup tasks like canceling any network requests removing event handlers cancelling any subscription and also invalidating timers from setState timeout or set interval
+>what should not do is called setState method because component is never re-render after it has been unmounted
+
+
+33#>Error Handling Method
+
+-[1]static getDerivedStaticFromError :
+
+>static getDerivedStaticFromError(error)
+
+-[2] componentDidCatch :
+
+>componentDidCatch(error, info)
+
+34#>Fragments
+
+-Fragments will prevent the extra node from being added to the DOM
+-key attribute is the only attribute that can be pass to a React Fragmet <React.Fragmet key={}> <React.Fragmet/>
+-but in <> ,</> we can not pass key attribute
+
+35#>Pure Component
+
+-class ParentComponentCls extends Component {            //Regular component
+-class ParentComponentCls extends PureComponent {        //Pure component
+
+-Regular component : A regular component does not implement the shouldComponentUpdate method. It always return true by default.
+-Pure component : A pure component on the other hand implements shouldComponentUpdate with a shallow props and state comparison.
+
+>Shallow comparison(SC) : sc in get true output if both have same reference data
+-Premitive Types: a sc return true if a and b have the same value and are of the same type.
+ex: string 'Nidhi' sc string 'Nidhi' return true
+-Complex Types: a sc return true if a and b reference the same object.
+ex: var a = [1, 2, 3]
+var b = [1, 2, 3]
+var c = a;
+
+sc
+var ab_eq = (a === b); //false
+var ac_eq = (a === c); //true
+
+same with object
+
+-Pure component: a pure component implements shouldComponentUpdate with a shallow props and state comparison
+
+				    difference?
+sc of prevState with currentState ----------------> Re-render component
+sc of preProps with currentProps  ----------------> Re-render component
+
+-ex: if constructor in state in variable name:'Nidhi' and again set value by setState name:'Nidhi' then sc comparision in Pure component will get same reference data so it will not re-render (same with state and props)but in regular component that things not happend. That is main difference in pure component and regular component
+
+-if parent component will not re-render then child component will also not re-render.
+
+important quality of pure component:
+
+-a pure component implements shouldComponentUpdate lifecycle method by performing shallow comparison on the props and state of the component
+-if there is no difference component will not re-render-performance boost
+-it is good idea to ensure that all the child component are also pure to avoid unexpected behaviour 
+-Never mutate the state.always return a new object that reflect the new state.
+
+-pure components
+
+36#>Why using Pure Component
+-preventing unnecessary renders can give u performance boost in certain scenarios 
+-but in pure component you should not mutate object or arrays in props or state. 
+-ex: if u need to add a new item to the list don't mutate it by pushing the item into list the reference to array never change and because for pure component check only for that the component will not re-render even if there is a difference always return a new object or array when dealing with pure components
+
+37#>Memo
+- pure components: pure components only rerender the class components when there is difference in the shallow comparison of props and state this of course result in a performance improvement pure components though only work with class based component but it could be achived in function base component by react.memo
+
+-Memo :  what pure component is to class base component memo is to functional component 
+-we can gain performance improvement by not re-rendering memo component.when parent component rerender memo component also rerender but name props going to stay same every rerender so need to avoid rerendering by this memo functional component
+
+-using export default react.memo(MemoComponent) : higher order component react.memo accepts a component add some things to that component and return a new enhanced component in our case component capable of avoiding re-render when there is no changes in props. 
+
+38#>Refs
+-refs make it possible to access DOM nodes directly with in react
+-if u need ref from child component to parent component it is possible
+-ref work with class component
+
+39#>Ref forwarding
+-we can not use ref in function component so using React.forwardRef() to forward ref from function child component to  class parent component 
+
+40#>react portals
+-when ever we create any component we mount this component on root element(defultly id='root') 
+-every single react component in our applicaton falls under root element that is div element id equalto root . what react portal provides is ability to break out of this DOM tree so u can render component on DOM node that is not under this root element.
+-in your react application even though all application components are children to the app component and app component mounted on the root DOM node it is possible to break away from that and mount on any DOM node that you wish to using react portals 
+-first parameter to create portal can be any element that react can render itcan be numbers, string JSX or even components 
+
+-whydo we need them
+-having deal with parent component CSS when that child component is a modal a pop-up or a tooltipthere is example below
+-https://codesandbox.io/s/00254q4n6p
+-if we consider just DOM tree this event bubbling would have never happened since an event fired from inside a portal will propagate to ancestor in the containingreact tree event bubbling still works so portal bheave like normal child in every other way
+-https://codepen.io/gaearon/pen/jGBWpE
+
+41#>Error Handling Phase Methods
+- static getDerivedStaticFromError(error)
+-componentDidCatch(error, info)
+-runtime error during rendering could put our application broken state.Basicaly react unmount the whole rect component tree what would be great is if we could catch error any where in component tree and display fallback UI this is where error boundaries take the spotlight 
+-A class component that implement either one or both of the lifecycle methods static getDerivedStaticFromError or componentDidCatch become an error boundary.
+-the static method getDerivedStaticFromError method is used to render a fallback UI after an error is thrown and the componentDidCatch method is used to log the error information.
+-error boundary catch error during rendering in lifecycle methods and in the constructors of the whole tree below them 
+-they do not catch error inside event handlers if u have onclick handler and want to catch error u just need to use the regular try catch statements not error boundaries
+
+-Error boundary are React components that catch JavaScript error in their child component tree, log those errors, and display a fall-back UI
+-A class component becomean Error Boundary by defining either or both of getDerivedStaticFromError and componentDidCatch lifecycle methods
+-The placement of the error boundary also matters as it controls if the entire app should have the fall-back UI or just the component causing the problem 
+-provide a way to gracefully handle error in application code.
+
+42#>Why we need to use Higher Order Components HOC
+-need to share comman funcationality between component without repeating component code 1st way put handler in parent component and pass down this handler as props to child component but if child component is scatter in react component tree lifting state would definitely not a the correct solution 
+-so need to share comman funcationality between component without repeating component code and that is where the concept of higher-order components comes in picture
+
+43#>Higher Order Components HOC
+-To share comman functionality between components
+-A pattern where a function takes a component as an argument and returns a new component
+-const NewComponent = higherOrderComponent(originalComponent)
+-hoc adds additional data or functionality to the original component so new component can be referred to enhanced component
+-const EnhancedComponent = higherOrderComponent(originalComponent)
+-Hoc pattern use to share comman functionality
+
+ex: const IronMan = withSuit(TonyStark)
+
+44#>Render Props
+- the term 'render props' refers to a technique for sharing code between react component using a prop whose value is a function
+
+-        <RenderPropsCounterComponent 
+          show={(count, incrementCount) => (<ClickCounterWithRenderPropsCls count={count} incrementCount={incrementCount}/>)}
+         />
+
+- {this.props.show(this.state.count, this.incrementCount)}
+-//or
+
+ <RenderPropsCounterComponent>
+          {
+            (count, incrementCount) => (
+              <ClickCounterWithRenderPropsCls count={count} incrementCount={incrementCount}/>
+            )
+          }
+ </RenderPropsCounterComponent>
+-{this.props.children(this.state.count, this.incrementCount)}
+
+-we are using a props this value is a function to render UI and share functionality
+
+45#>Pattern for sharing code
+-1>Higher Order Components HOC
+-2>Render Prop
+
+46#> React Context
+-context provides a way to pass data through the component tree without having to pass props down manually at every level.
+-avoid passing props through every level of component tree
+-use context to provide a props to deeply nested component without having to pass that a props through every intermediate component.
+-Two way to use context
+
+1>UserProvider and UserConsumer : it is only work with class component
+2>contextType : 2nd way in limitation is that you can only subscribe to a single context using cotext type
+
+-many time we need more then one context in this time consumer component 1st way to go 
+
+47#>HTTP in React
+-When u building web applications you more often than have to reach out to the server to fetch some data or send some data based on user interaction and this web application in our context is react application. But you knoe react is alibrary for building user interfaces it is no way concerned about Http this raises very important question 'how do we make Ajax request in react or how do we make API calls in react' to answer that question first let me tell you that react itself does not have a particular way to fetch or send data to the server in fact as far as react is concerned it doesn't even have to know that there is server in the picture
+remember react component simple 'reads props and state' and render the UI there for to use data from server u just have to get data into your components props or state now if react isn't going to handle the request who will be doing that this is where you will have to make to use of an 'Http library' there are few popular ones out ther 
+ex: Axios, Fetch API 
+
+Axios: Axios is promise-based HTTP clint that sport an easy to use API and can be used in both breowser and node. making Http requests to fetch or save data
+
+GET-  componentDidMount() {
+        axios.get('https://jsonplaceholder.typicode.com/posts')
+        .then((response) => {
+            console.log(response)
+            this.setState({posts: response.data})
+        })
+        .catch((error) => {
+            console.log(error)
+            this.setState({errorMsg: 'Error retreving data'})
+        })
+    }
+-where do we place code to make get request :  In componentDidMount lifecycle methood this method will be executed when the component mount for first time and this only executed once during components lifetime a perfect place for get request
+
+POST- submitHandler = (event) => {
+        event.preventDefault() 
+        console.log(this.state);
+        axios.post('https://jsonplaceholder.typicode.com/posts', this.state)  //second argument what data to be send
+        .then( response => {
+            console.log(response);
+        })
+        .catch( error => {
+            console.log(error);
+        })
+    }
+
+
+48#> class vs functional
+
+-class : 
+1>this.props.name
+2>Pure component
+3>ref
+4>React Context(UserProvider and UserConsumer)
+
+-Function :
+1>props.name
+2> memo
+3>forwording ref
+
